@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Domácí finance</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div>
+        <h1>Domácí finance</h1>
+        <p class="muted">Jednoduché MVP pro rodinný rozpočet</p>
+      </div>
+
+      <nav class="menu">
+        <button class="tab-button active" data-tab="dashboard">Přehled</button>
+        <button class="tab-button" data-tab="transactions">Transakce</button>
+        <button class="tab-button" data-tab="budgets">Rozpočty</button>
+        <button class="tab-button" data-tab="planner">Plánované platby</button>
+        <button class="tab-button" data-tab="settings">Nastavení</button>
+      </nav>
+
+      <div class="card compact">
+        <label for="monthFilter">Měsíc</label>
+        <input type="month" id="monthFilter" />
+      </div>
+
+      <div class="card compact actions">
+        <button id="seedDemoBtn">Nahrát demo data</button>
+        <button id="clearDataBtn" class="danger">Smazat vše</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <section class="tab-panel active" id="dashboard">
+        <div class="hero">
+          <div class="hero-copy">
+            <h2>Rodinný finanční přehled</h2>
+            <p class="muted">Příjmy, výdaje, rozpočty a plánované platby na jednom místě.</p>
+          </div>
+          <button id="openQuickAdd">+ Rychle přidat transakci</button>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card">
+            <span class="label">Příjmy</span>
+            <strong id="incomeTotal">0 Kč</strong>
+          </article>
+          <article class="stat-card">
+            <span class="label">Výdaje</span>
+            <strong id="expenseTotal">0 Kč</strong>
+          </article>
+          <article class="stat-card">
+            <span class="label">Bilance</span>
+            <strong id="balanceTotal">0 Kč</strong>
+          </article>
+          <article class="stat-card">
+            <span class="label">Plánované platby</span>
+            <strong id="plannedTotal">0 Kč</strong>
+          </article>
+        </div>
+
+        <div class="dashboard-grid">
+          <section class="card">
+            <div class="section-header">
+              <h3>Výdaje podle kategorií</h3>
+            </div>
+            <div id="categoryBreakdown" class="stack"></div>
+          </section>
+
+          <section class="card">
+            <div class="section-header">
+              <h3>Rozpočty</h3>
+            </div>
+            <div id="budgetOverview" class="stack"></div>
+          </section>
+
+          <section class="card full-width">
+            <div class="section-header">
+              <h3>Poslední transakce</h3>
+            </div>
+            <div id="recentTransactions" class="stack"></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="transactions">
+        <div class="card">
+          <div class="section-header">
+            <h2>Transakce</h2>
+          </div>
+
+          <form id="transactionForm" class="form-grid">
+            <select id="transactionType" required>
+              <option value="expense">Výdaj</option>
+              <option value="income">Příjem</option>
+            </select>
+            <input id="transactionTitle" type="text" placeholder="Název" required />
+            <input id="transactionAmount" type="number" min="0" step="0.01" placeholder="Částka" required />
+            <select id="transactionCategory" required></select>
+            <select id="transactionMember" required></select>
+            <input id="transactionDate" type="date" required />
+            <input id="transactionNote" type="text" placeholder="Poznámka" />
+            <button type="submit">Přidat transakci</button>
+          </form>
+        </div>
+
+        <div class="card">
+          <div class="section-header">
+            <h3>Seznam transakcí</h3>
+          </div>
+          <div id="allTransactions" class="stack"></div>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="budgets">
+        <div class="card">
+          <div class="section-header">
+            <h2>Měsíční rozpočty</h2>
+          </div>
+
+          <form id="budgetForm" class="form-grid narrow">
+            <select id="budgetCategory" required></select>
+            <input id="budgetLimit" type="number" min="0" step="0.01" placeholder="Limit rozpočtu" required />
+            <button type="submit">Uložit rozpočet</button>
+          </form>
+        </div>
+
+        <div class="card">
+          <div id="budgetList" class="stack"></div>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="planner">
+        <div class="card">
+          <div class="section-header">
+            <h2>Plánované platby</h2>
+          </div>
+
+          <form id="plannedForm" class="form-grid">
+            <input id="plannedTitle" type="text" placeholder="Např. Nájem" required />
+            <input id="plannedAmount" type="number" min="0" step="0.01" placeholder="Částka" required />
+            <select id="plannedCategory" required></select>
+            <input id="plannedDueDate" type="date" required />
+            <select id="plannedStatus" required>
+              <option value="upcoming">Čeká</option>
+              <option value="paid">Zaplaceno</option>
+            </select>
+            <button type="submit">Přidat platbu</button>
+          </form>
+        </div>
+
+        <div class="card">
+          <div id="plannedList" class="stack"></div>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="settings">
+        <div class="settings-grid">
+          <div class="card">
+            <div class="section-header">
+              <h2>Členové domácnosti</h2>
+            </div>
+            <form id="memberForm" class="form-grid narrow">
+              <input id="memberName" type="text" placeholder="Jméno" required />
+              <button type="submit">Přidat člena</button>
+            </form>
+            <div id="memberList" class="stack"></div>
+          </div>
+
+          <div class="card">
+            <div class="section-header">
+              <h2>Kategorie</h2>
+            </div>
+            <form id="categoryForm" class="form-grid narrow">
+              <input id="categoryName" type="text" placeholder="Název kategorie" required />
+              <button type="submit">Přidat kategorii</button>
+            </form>
+            <div id="categoryList" class="stack"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="quickAddDialog">
+    <form method="dialog" class="dialog-header">
+      <h3>Rychlé přidání</h3>
+      <button>✕</button>
+    </form>
+    <form id="quickAddForm" class="form-grid">
+      <select id="quickType" required>
+        <option value="expense">Výdaj</option>
+        <option value="income">Příjem</option>
+      </select>
+      <input id="quickTitle" type="text" placeholder="Název" required />
+      <input id="quickAmount" type="number" min="0" step="0.01" placeholder="Částka" required />
+      <select id="quickCategory" required></select>
+      <select id="quickMember" required></select>
+      <input id="quickDate" type="date" required />
+      <button type="submit">Uložit</button>
+    </form>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
